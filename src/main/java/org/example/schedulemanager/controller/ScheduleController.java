@@ -18,10 +18,8 @@ public class ScheduleController {
 
     // Lv 1. 일정 생성
     @PostMapping("/schedules")
-    public CreateScheduleResponse createSchedule(
-            // url 말고, 몸통에 넣을 때 RequestBody
-            @RequestBody CreateScheduleRequest request
-    ) {
+    public CreateScheduleResponse createSchedule(@RequestBody CreateScheduleRequest request) {
+
         CreateScheduleResponse result = scheduleService.save(request);
 
         return result;
@@ -33,6 +31,15 @@ public class ScheduleController {
     public List<GetScheduleResponse> getSchedules(@RequestParam(required = false) String name) {
 
         List<GetScheduleResponse> result = scheduleService.findAll(name);
+
+        return result;
+    }
+
+    // 선택 일정 조회 - id로 식별
+    @GetMapping("/schedules/{id}")
+    public GetScheduleResponse getOneSchedule(@PathVariable Long id) {
+
+        GetScheduleResponse result = scheduleService.getOne(id);
 
         return result;
     }

@@ -20,6 +20,7 @@ public class ScheduleService {
     // ScheduleRepository 주입
     private final ScheduleRepository scheduleRepository;
 
+    // Create - 일정 생성
     @Transactional
     public CreateScheduleResponse save(CreateScheduleRequest request) {
         // request에서 값 꺼내와 일정 객체로 변환
@@ -44,6 +45,7 @@ public class ScheduleService {
         );
     }
 
+    // Read - 다건 조회
     @Transactional(readOnly = true)
     public List<GetScheduleResponse> findAll(String name) {
 
@@ -82,5 +84,24 @@ public class ScheduleService {
 
         // 반환
         return dtos;
+    }
+
+    // Read - 단건 조회
+    @Transactional(readOnly = true)
+    public GetScheduleResponse getOne(Long id) {
+
+        // id에 해당하는 일정 반환 / 예외 처리
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("없는 일정입니다.")
+        );
+
+        return new GetScheduleResponse(
+                schedule.getId(),
+                schedule.getTitle(),
+                schedule.getContents(),
+                schedule.getName(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        );
     }
 }
