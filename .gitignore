@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+#환경 변수 파일 (.env)
+# application.properties에서 import하여 DB 접속 정보를 불러옵니다.
+# .gitignore에 반드시 추가하여 Git에 업로드되지 않도록 합니다.
+.env
