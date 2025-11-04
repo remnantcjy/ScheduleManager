@@ -6,6 +6,7 @@ import org.example.schedulemanager.dto.CreateScheduleResponse;
 import org.example.schedulemanager.dto.GetScheduleResponse;
 import org.example.schedulemanager.entity.Schedule;
 import org.example.schedulemanager.repository.ScheduleRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,13 +45,27 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetScheduleResponse> findAll() {
-        // 레포지토리에서 모든 일정을 일정리스트에 담아줌
-        List<Schedule> schedules = scheduleRepository.findAll();
+    public List<GetScheduleResponse> findAll(String name) {
+
+        // 스케줄 리스트 선언
+        List<Schedule> schedules;
+
+        // name이 있을 때
+        if (name != null) {
+
+            // 작성자명 기준으로 전체 일정 조회 및 반환
+            schedules = scheduleRepository.findAllByName(name);
+        } else {
+
+            // name이 없을 때
+            // 수정일 기준 (내림차순 정렬)로 전체 일정 조회 및 반환
+            schedules = scheduleRepository.findAll(Sort.by(Sort.Direction.DESC, "modifiedAt"));
+        }
 
         // GetAllScheduleResponse형으로 반환할 dtos 리스트 생성
         List<GetScheduleResponse> dtos = new ArrayList<>();
 
+        // Schedule -> GetScheduleResponse 타입으로 형변환
         for (Schedule schedule : schedules) {
             GetScheduleResponse dto = new GetScheduleResponse(
                     schedule.getId(),
@@ -60,8 +75,12 @@ public class ScheduleService {
                     schedule.getCreatedAt(),
                     schedule.getModifiedAt()
             );
+
+            // 변환된 dto를 리스트에 추가
             dtos.add(dto);
         }
+
+        // 반환
         return dtos;
     }
 }

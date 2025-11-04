@@ -19,10 +19,7 @@ public class ScheduleController {
     // Lv 1. 일정 생성
     @PostMapping("/schedules")
     public CreateScheduleResponse createSchedule(
-//            @RequestParam String title,
-//            @RequestBody String contents,
-//            @RequestParam String name,
-//            @RequestParam String password
+            // url 말고, 몸통에 넣을 때 RequestBody
             @RequestBody CreateScheduleRequest request
     ) {
         CreateScheduleResponse result = scheduleService.save(request);
@@ -33,9 +30,9 @@ public class ScheduleController {
     // Lv 2. 일정 조회
     // 전체 일정 조회 - 작성자명 기준으로 조회도 가능
     @GetMapping("/schedules")
-    public List<GetScheduleResponse> getSchedules() {
+    public List<GetScheduleResponse> getSchedules(@RequestParam(required = false) String name) {
 
-        List<GetScheduleResponse> result = scheduleService.findAll();
+        List<GetScheduleResponse> result = scheduleService.findAll(name);
 
         return result;
     }
