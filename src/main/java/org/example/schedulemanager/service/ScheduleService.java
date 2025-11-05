@@ -1,9 +1,7 @@
 package org.example.schedulemanager.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.schedulemanager.dto.CreateScheduleRequest;
-import org.example.schedulemanager.dto.CreateScheduleResponse;
-import org.example.schedulemanager.dto.GetScheduleResponse;
+import org.example.schedulemanager.dto.*;
 import org.example.schedulemanager.entity.Schedule;
 import org.example.schedulemanager.repository.ScheduleRepository;
 import org.springframework.data.domain.Sort;
@@ -56,7 +54,7 @@ public class ScheduleService {
         if (name != null) {
 
             // 작성자명 기준으로 전체 일정 조회 및 반환
-            schedules = scheduleRepository.findAllByName(name);
+            schedules = scheduleRepository.findAllByNameOrderByModifiedAtDesc(name);
         } else {
 
             // name이 없을 때
@@ -102,6 +100,33 @@ public class ScheduleService {
                 schedule.getName(),
                 schedule.getCreatedAt(),
                 schedule.getModifiedAt()
+        );
+    }
+
+    // Update - 일정 수정
+    @Transactional
+    public UpdateScheduleResponse update(Long id, UpdateScheduleRequest request) {
+
+        // id에 해당하는 일정 반환 / 예외 처리
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("없는 일정입니다.")
+        );
+
+        // 비밀번호 불일치 시
+        if (!schedule.getPassword().equals(request.getPassword())) {
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 비밀번호 일치 시 - 일정 업데이트 (제목, 내용)
+        schedule.update(
+                request.getTitle(),
+                request.getContents()
+        );
+
+        // 업데이트 응답 반환 (제목, 내용, 수정일)
+        return new UpdateScheduleResponse(
+                schedule.getTitle(),
+                schedule.getContents()
         );
     }
 }

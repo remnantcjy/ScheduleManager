@@ -1,9 +1,7 @@
 package org.example.schedulemanager.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.schedulemanager.dto.CreateScheduleRequest;
-import org.example.schedulemanager.dto.CreateScheduleResponse;
-import org.example.schedulemanager.dto.GetScheduleResponse;
+import org.example.schedulemanager.dto.*;
 import org.example.schedulemanager.service.ScheduleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,4 +41,17 @@ public class ScheduleController {
 
         return result;
     }
+
+    // Lv 3. 일정 수정
+    @PutMapping("/schedules/{id}")
+    public UpdateScheduleResponse updateSchedule(
+            @PathVariable Long id,
+            @RequestBody UpdateScheduleRequest request
+    ) {
+
+        UpdateScheduleResponse result = scheduleService.update(id, request);
+
+        return result;
+    }
+
 }
