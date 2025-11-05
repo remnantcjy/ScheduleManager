@@ -54,4 +54,13 @@ public class ScheduleController {
         return result;
     }
 
+    // Lv 4. 일정 삭제
+    @DeleteMapping("/schedules/{id}")
+    public void delete(
+            @PathVariable Long id,
+            @RequestParam String password
+    ) {
+        scheduleService.delete(id, password);
+    }
+
 }

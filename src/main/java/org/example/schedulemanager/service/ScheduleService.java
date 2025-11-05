@@ -129,4 +129,31 @@ public class ScheduleService {
                 schedule.getContents()
         );
     }
+
+    // Delete - 일정 삭제
+    @Transactional
+    public void delete(Long id, String password) {
+
+        // id가 있는지 확인
+        boolean existence = scheduleRepository.existsById(id);
+
+        // id가 있으면 해당하는 일정 반환
+        Schedule schedule = scheduleRepository.findById(id).orElseThrow(
+                () -> new IllegalStateException("없는 일정입니다.")
+        );
+
+        // 유저가 없는 경우
+        if (!existence) {
+            throw new IllegalStateException("없는 유저입니다.");
+        } else {
+            // 유저가 있을 때, 비밀번호 확인
+            if (schedule.getPassword().equals(password)) {
+
+                // 비밀번호 일치 시
+                scheduleRepository.deleteById(id);
+            } else {
+                throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+            }
+        }
+    }
 }
