@@ -132,7 +132,7 @@ public class ScheduleService {
 
     // Delete - 일정 삭제
     @Transactional
-    public void delete(Long id, String password) {
+    public void delete(Long id, DeleteScheduleRequest request) {
 
         // id가 있는지 확인
         boolean existence = scheduleRepository.existsById(id);
@@ -147,7 +147,7 @@ public class ScheduleService {
             throw new IllegalStateException("없는 유저입니다.");
         } else {
             // 유저가 있을 때, 비밀번호 확인
-            if (schedule.getPassword().equals(password)) {
+            if (schedule.getPassword().equals(request.getPassword())) {
 
                 // 비밀번호 일치 시
                 scheduleRepository.deleteById(id);
