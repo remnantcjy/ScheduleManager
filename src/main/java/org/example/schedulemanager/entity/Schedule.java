@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -38,4 +39,5 @@ public class Schedule extends BaseEntity {
         this.title = title;
         this.contents = contents;
     }
+
 }
