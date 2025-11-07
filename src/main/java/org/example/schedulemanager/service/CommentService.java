@@ -24,10 +24,10 @@ public class CommentService {
 
 
     @Transactional
-    public CreateCommentResponse save(Long id, CreateCommentRequest request) {
+    public CreateCommentResponse save(Long scheduleId, CreateCommentRequest request) {
 
         // 해당 id의 일정이 있는지 확인 / 예외 처리
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new IllegalStateException("없는 일정입니다.")
         );
 

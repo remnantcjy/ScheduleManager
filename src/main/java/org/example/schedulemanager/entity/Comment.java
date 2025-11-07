@@ -22,7 +22,7 @@ public class Comment extends  BaseEntity{
     // 외래키 지정 - 외래키 가진 Many쪽이 주인
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)  // 가능한 LAZY 사용!
-    @JoinColumn(name = "schedule_id")
+    @JoinColumn(name = "id")
     private Schedule schedule;  // 일정
 
     public Comment(String contents, String name, String password) {
